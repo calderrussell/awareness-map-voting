@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101b2b">
+  <meta name="description" content="Place one dot for each person on an internal and external self-awareness map, then see the collective results.">
+  <title>Awareness Map</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23101b2b'/%3E%3Cpath d='M32 10v44M10 32h44' stroke='%238ba1b7' stroke-width='3'/%3E%3Ccircle cx='42' cy='19' r='7' fill='%23edac5e'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="config.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i></span><span>Awareness Map</span></div>
+    <nav aria-label="Main navigation" class="top-nav">
+      <button id="voteTab" type="button" class="nav-button active" aria-current="page">Place dots</button>
+      <button id="resultsTab" type="button" class="nav-button">Collective results</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div>
+        <p class="eyebrow">THE GROUP VIEW</p>
+        <h1>Where do we see ourselves?</h1>
+        <p class="intro-copy">Place one dot for each person. The center is neutral; move right for more internal self-awareness and up for more external self-awareness.</p>
+      </div>
+      <div class="axis-key" aria-label="Axis definitions">
+        <div><strong>Internal</strong><span>Understanding your own values, reactions, and impact.</span></div>
+        <div><strong>External</strong><span>Understanding how others experience you.</span></div>
+      </div>
+    </section>
+
+    <section id="voteView" class="view" aria-labelledby="voteHeading">
+      <div class="section-head"><div><p class="eyebrow">YOUR BALLOT</p><h2 id="voteHeading">Place each person</h2></div><p id="progressText" class="progress-text">0 of 8 placed</p></div>
+      <div class="vote-layout">
+        <div class="chart-panel">
+          <div class="chart-topline"><div><h3 id="currentName">Anna</h3><p id="chartInstruction">Tap or click the grid to place a dot.</p></div><span class="scale-label">LOW → HIGH</span></div>
+          <div class="plot-shell">
+            <div class="y-title">EXTERNAL SELF-AWARENESS</div>
+            <div class="plot-frame">
+              <span class="axis-end top">HIGH</span>
+              <div id="votePlot" class="plot vote-plot" role="application" aria-label="Position Anna on the awareness grid" tabindex="0">
+                <span class="quadrant q-nw">High external<br>Low internal</span>
+                <span class="quadrant q-ne">High external<br>High internal</span>
+                <span class="quadrant q-sw">Low external<br>Low internal</span>
+                <span class="quadrant q-se">Low external<br>High internal</span>
+                <span class="crosshair horizontal"></span><span class="crosshair vertical"></span>
+                <span id="voteDot" class="placed-dot" hidden></span>
+              </div>
+              <div class="x-ends"><span>LOW</span><span>HIGH</span></div>
+              <div class="x-title">INTERNAL SELF-AWARENESS</div>
+            </div>
+          </div>
+          <div class="chart-foot"><span id="positionText">No position selected</span><span>Use arrow keys for fine adjustments</span></div>
+        </div>
+        <aside class="roster-panel" aria-label="People to place">
+          <div class="roster-head"><h3>People</h3><span>8 TOTAL</span></div>
+          <div id="peopleList" class="people-list"></div>
+          <div class="roster-actions"><button id="nextButton" class="button secondary" type="button">Next person</button><button id="submitButton" class="button primary" type="button" disabled>Submit all dots</button></div>
+          <p class="small-note">One ballot per browser. Your choices become part of the shared results when you submit.</p>
+        </aside>
+      </div>
+      <p id="voteMessage" class="message" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="resultsView" class="view" aria-labelledby="resultsHeading" hidden>
+      <div class="section-head"><div><p class="eyebrow">EVERYONE'S DOTS</p><h2 id="resultsHeading">Collective results</h2></div><div class="results-meta"><span id="ballotCount">0 ballots</span><button id="refreshButton" type="button" class="text-button">Refresh</button></div></div>
+      <div class="legend"><span><i class="legend-vote"></i> Individual vote</span><span><i class="legend-average"></i> Average</span></div>
+      <div id="resultsStatus" class="results-status" role="status" aria-live="polite">Loading results…</div>
+      <div id="resultsGrid" class="results-grid"></div>
+      <p class="results-note">Each chart uses the same axes: internal awareness increases to the right, external awareness increases upward. The larger outlined dot is the average.</p>
+    </section>
+  </main>
+</body>
+</html>

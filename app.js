@@ -166,3 +166,30 @@ $("submitButton").addEventListener("click", submitBallot);
 hasSubmitted = localStorage.getItem("awareness-map-submitted-v1") === "yes";
 renderBallot();
 if (hasSubmitted) showView("results");
+
+if (document.modelContext?.registerTool) {
+  const pointSchema = {type:"object",properties:{x:{type:"integer",minimum:0,maximum:100},y:{type:"integer",minimum:0,maximum:100}},required:["x","y"],additionalProperties:false};
+  const ballotSchema = {type:"object",properties:Object.fromEntries(PEOPLE.map(name => [name,pointSchema])),required:PEOPLE,additionalProperties:false};
+  try {
+    Promise.resolve(document.modelContext.registerTool({
+      name:"submit_awareness_ballot",
+      title:"Submit awareness ballot",
+      description:"Submit one internal and external awareness position for each of the eight named people, then show the collective results.",
+      inputSchema:{type:"object",properties:{votes:ballotSchema},required:["votes"],additionalProperties:false},
+      annotations:{readOnlyHint:false,untrustedContentHint:false},
+      async execute(input) {
+        if (hasSubmitted) throw new Error("This browser has already submitted a ballot.");
+        if (!input?.votes || Object.keys(input.votes).length !== PEOPLE.length || !PEOPLE.every(name => {
+          const p = input.votes[name];
+          return p && Number.isInteger(p.x) && Number.isInteger(p.y) && p.x >= 0 && p.x <= 100 && p.y >= 0 && p.y <= 100;
+        })) throw new Error("Provide one position from 0 to 100 for every person.");
+        positions = Object.fromEntries(PEOPLE.map(name => [name,{x:input.votes[name].x,y:input.votes[name].y}]));
+        savePositions();
+        renderBallot();
+        await submitBallot();
+        if (!hasSubmitted) throw new Error($("voteMessage").textContent || "Could not submit the ballot.");
+        return {status:"submitted",ballotCount:8,resultsVisible:true};
+      },
+    })).catch(console.error);
+  } catch (error) { console.error(error); }
+}

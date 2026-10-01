@@ -1,6 +1,6 @@
 import { ASSETS } from "./static.js";
 
-const PEOPLE = ["Anna", "Sydney", "Max", "Anania", "Calder", "Aleai", "Jake", "Tommy"];
+const PEOPLE = ["Anna", "Sydney", "Max", "Anania", "Calder", "Aleai", "Jake", "Tommy", "Zalea"];
 const ALLOWED_ORIGINS = new Set([
   "https://awareness-map-votes.trussell.chatgpt.site",
   "https://calderrussell.github.io",

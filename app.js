@@ -1,4 +1,4 @@
-const PEOPLE = ["Anna", "Sydney", "Max", "Anania", "Calder", "Aleai", "Jake", "Tommy"];
+const PEOPLE = ["Anna", "Sydney", "Max", "Anania", "Calder", "Aleai", "Jake", "Tommy", "Zalea"];
 const STORAGE_KEY = "awareness-map-ballot-v1";
 const VOTER_KEY = "awareness-map-voter-v1";
 const API = (window.AWARENESS_API_URL || "").replace(/\/$/, "");
@@ -58,8 +58,8 @@ function renderBallot() {
     return button;
   }));
   const count = PEOPLE.filter(person => positions[person]).length;
-  $("progressText").textContent = `${count} of 8 placed`;
-  $("submitButton").disabled = count !== 8 || hasSubmitted;
+  $("progressText").textContent = `${count} of ${PEOPLE.length} placed`;
+  $("submitButton").disabled = count !== PEOPLE.length || hasSubmitted;
   $("submitButton").textContent = hasSubmitted ? "Ballot submitted" : "Submit all dots";
   $("votePlot").style.pointerEvents = hasSubmitted ? "none" : "auto";
 }
@@ -174,7 +174,7 @@ if (document.modelContext?.registerTool) {
     Promise.resolve(document.modelContext.registerTool({
       name:"submit_awareness_ballot",
       title:"Submit awareness ballot",
-      description:"Submit one internal and external awareness position for each of the eight named people, then show the collective results.",
+      description:"Submit one internal and external awareness position for each of the nine named people, then show the collective results.",
       inputSchema:{type:"object",properties:{votes:ballotSchema},required:["votes"],additionalProperties:false},
       annotations:{readOnlyHint:false,untrustedContentHint:false},
       async execute(input) {
@@ -188,7 +188,7 @@ if (document.modelContext?.registerTool) {
         renderBallot();
         await submitBallot();
         if (!hasSubmitted) throw new Error($("voteMessage").textContent || "Could not submit the ballot.");
-        return {status:"submitted",ballotCount:8,resultsVisible:true};
+        return {status:"submitted",dotCount:PEOPLE.length,resultsVisible:true};
       },
     })).catch(console.error);
   } catch (error) { console.error(error); }
